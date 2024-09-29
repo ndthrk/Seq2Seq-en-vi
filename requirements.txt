@@ -1,0 +1,9 @@
+numpy
+spacy
+pyvi
+matplotlib
+deep-translator
+datasets
+contractions
+torchmetrics
+nltk
