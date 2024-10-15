@@ -38,6 +38,8 @@ def train(train_dataloader, encoder, decoder, encoder_opt, decoder_opt, criterio
     criterion = criterion_alg
 
     start = time.time()
+    encoder.train()
+    decoder.train()
     for epoch in range(1, n_epochs + 1):
         loss = train_epoch(train_dataloader, encoder, decoder, encoder_optimizer, decoder_optimizer, criterion)
         loss_each_epoch.append(loss)

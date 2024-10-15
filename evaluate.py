@@ -4,6 +4,10 @@ from nltk.translate.bleu_score import sentence_bleu
 import torch
 
 def evaluate(encoder, decoder, src_sentence, src_vocab, tgt_vocab, src_nlp, device):
+    
+    encoder.eval()
+    decoder.eval()
+
     with torch.no_grad():
         input_tensor = tensorFromSentence(src_vocab, src_sentence, src_nlp, device)
 
