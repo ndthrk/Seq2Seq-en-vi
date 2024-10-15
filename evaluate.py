@@ -1,6 +1,6 @@
 import random
 from utils import tensorFromSentence
-from nltk.translate.bleu_score import sentence_bleu
+from nltk.translate.bleu_score import sentence_bleu,SmoothingFunction
 import torch
 
 def evaluate(encoder, decoder, src_sentence, src_vocab, tgt_vocab, src_nlp, device):
@@ -43,7 +43,9 @@ def evaluateRandom(encoder, decoder, data, src_vocab, tgt_vocab, src_nlp, tgt_nl
         print('Vi_pred:\t', output_sentence)
 
         reference = [[token.text for token in tgt_nlp.tokenizer(pair['vi'])]]
-        bleu_score = sentence_bleu(reference, output_words)
+        chencherry = SmoothingFunction()
+        bleu_score = sentence_bleu(reference, output_words, smoothing_function=chencherry.method1)
+        # bleu_score = sentence_bleu(reference, output_words)
         total_bleu += bleu_score
 
         print('-' * 12)
@@ -56,10 +58,9 @@ def calcBLEU(encoder, decoder, test_data, src_vocab, tgt_vocab, src_nlp, tgt_nlp
     for pair in test_data:
         output_words = evaluate(encoder, decoder, pair['en'], src_vocab, tgt_vocab, src_nlp, device)
         reference = [[token.text for token in tgt_nlp.tokenizer(pair['vi'])]]
-        bleu_score = sentence_bleu(reference, output_words)
+        chencherry = SmoothingFunction()
+        bleu_score = sentence_bleu(reference, output_words, smoothing_function=chencherry.method1)
         total_bleu += bleu_score
 
     avg_bleu = total_bleu / len(test_data)
-    print(f"Average BLEU score: {avg_bleu:.4f}")
-
     return avg_bleu
